@@ -13,7 +13,7 @@ import App from '../components/App';
 // Child routes
 import home from './home';
 import login from './login';
-import blank from './dashboardPages/blank';
+import users from './dashboardPages/users';
 import error from './error';
 
 import Header from '../components/Header';
@@ -31,7 +31,7 @@ export default [
       return render(
         <App context={context}>{component}</App>
       );
-    },
+    },  
   },
 
 
@@ -41,7 +41,7 @@ export default [
   // keep in mind, routes are evaluated in order
     children: [
       home,
-      blank,
+      users,
 
       // place new routes before...
       error,

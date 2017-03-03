@@ -37,8 +37,8 @@ class Sidebar extends Component {
               </a>
             </li>
             <li>
-              <a href="" onClick={(e) => { e.preventDefault(); history.push('/blank'); }} >
-                Blank
+              <a href="" onClick={(e) => { e.preventDefault(); history.push('/users'); }} >
+                Users
               </a>
             </li>
             <li>
