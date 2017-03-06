@@ -21,6 +21,7 @@ import Login from './views/Pages/Login/'
 import Register from './views/Pages/Register/'
 import Page404 from './views/Pages/Page404/'
 import Page500 from './views/Pages/Page500/'
+import Users from './views/Pages/Users/'
 import Widgets from './views/Widgets/'
 
 export default (
@@ -28,6 +29,9 @@ export default (
     <Route path="/" name="Home" component={Full}>
       <IndexRoute component={Dashboard}/>
       <Route path="dashboard" name="Dashboard" component={Dashboard}/>
+      <Route path="pages/" name="Features">
+        <Route path="users" name="Users Page" component={Users}/>
+      </Route>
       <Route path="components/" name="Components">
         <IndexRoute component={Buttons}/>
         <Route path="buttons" name="Buttons" component={Buttons}/>
