@@ -22,6 +22,7 @@ import Register from './views/Pages/Register/'
 import Page404 from './views/Pages/Page404/'
 import Page500 from './views/Pages/Page500/'
 import Users from './views/Pages/Users/'
+import CreateUser from './views/Pages/Users/CreateUser'
 import Widgets from './views/Widgets/'
 
 export default (
@@ -30,7 +31,10 @@ export default (
       <IndexRoute component={Dashboard}/>
       <Route path="dashboard" name="Dashboard" component={Dashboard}/>
       <Route path="pages/" name="Features">
-        <Route path="users" name="Users Page" component={Users}/>
+        <Route path="users/" name="Users Page">
+          <IndexRoute component={Users}/>
+          <Route path="new" name="New User" component={CreateUser}/>  
+        </Route>
       </Route>
       <Route path="components/" name="Components">
         <IndexRoute component={Buttons}/>

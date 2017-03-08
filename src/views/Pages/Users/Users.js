@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import UsersList from '../../../containers/Users/UsersList'
 
 class Users extends Component {
   render() {
@@ -11,28 +12,7 @@ class Users extends Component {
                 <strong>User's List</strong>
               </div>
               <div className="card-block">
-                <table className="table">
-                  <thead className="thead-inverse">
-                    <tr>
-                      <th>#</th>
-                      <th>Full Name</th>
-                      <th>E-mail</th>
-                      <th>Phone Number</th>
-                      <th>Position</th>
-                      <th>Permissions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th scope="row">1</th>
-                      <td>Jefferson Lima</td>
-                      <td>jeff@tokenlab.com.br</td>
-                      <td>16 987654321</td>
-                      <td><span className="badge badge-default">Scrum Master</span></td>
-                      <td><span className="badge badge-success">Administrator</span></td>
-                    </tr>
-                  </tbody>
-                </table>
+                <UsersList />
               </div>
             </div>
           </div>
@@ -43,3 +23,4 @@ class Users extends Component {
 }
 
 export default Users;
+
