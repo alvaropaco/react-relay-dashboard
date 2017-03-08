@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Button, Col, Label, Input, Form, FormGroup, FormText } from 'reactstrap';
+import { Alert, Button, Col, Label, Input, Form, FormGroup, FormText } from 'reactstrap';
+import { createUser } from '../../actions/Users/index';
 
 class UsersForm extends Component {
     constructor (props) {
@@ -31,6 +32,26 @@ class UsersForm extends Component {
     }
 
     handleSubmit(event) {
+        this.props.createUser(this.state.formData)
+        .then((data) => {
+            if (data.value.status !== 201) {
+                return(
+                     <div>
+                         <Alert color="danger" isOpen="true">
+                            <strong>Oh snap!</strong> Change a few things up and try submitting again.
+                        </Alert>
+                    </div>
+                )
+            } else {
+                return (
+                     <div>
+                        <Alert color="success"  isOpen="true">
+                            <strong>Well done!</strong> You successfully create "{this.state.formData['email']}" user.
+                        </Alert>
+                    </div>
+                )
+            }
+        })
         event.preventDefault();
     }
 
@@ -129,7 +150,7 @@ const mapStateToProps = (state) => {
 }
 
 const matchDispatchToProps = (dispatch) => {
-    return bindActionCreators({  }, dispatch)
+    return bindActionCreators({ createUser: createUser }, dispatch)
 }
 
 export default connect(mapStateToProps, matchDispatchToProps)(UsersForm);

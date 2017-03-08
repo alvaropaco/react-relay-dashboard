@@ -21,6 +21,8 @@ export default (state=null, action) => {
           list[i].permission = permissions[o.permission];
         }) 
         return list
+      case "CREATE_USER_FULFILLED":
+        return action.payload
       default:
         return state;
   }

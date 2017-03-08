@@ -26,6 +26,22 @@ export function loadUsersList () {
         })
     }
 }
+
+export function createUser (data) {
+    return {
+        type: 'CREATE_USER',
+        payload: new Promise((resolve, reject) => {
+            instance.post('/users', data)
+            .then(function (response) {
+                return resolve(response);
+            })
+            .catch(function (error) {
+                return reject(error);
+            })
+        })
+    }
+}
+
 export const selectUser = (user) => {
     return {
         type: 'USER_SELECTED',
