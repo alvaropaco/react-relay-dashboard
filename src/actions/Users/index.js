@@ -42,6 +42,36 @@ export function createUser (data) {
     }
 }
 
+export function updateUser (data) {
+    return {
+        type: 'UPDATE_USER',
+        payload: new Promise((resolve, reject) => {
+            instance.put('/users', data)
+            .then(function (response) {
+                return resolve(response);
+            })
+            .catch(function (error) {
+                return reject(error);
+            })
+        })
+    }
+}
+
+export function removeUsers (data) {
+    return {
+        type: 'REMOVE_USERS',
+        payload: new Promise((resolve, reject) => {
+            instance.delete('/users', data)
+            .then(function (response) {
+                return resolve(response.data);
+            })
+            .catch(function (error) {
+                return reject(error);
+            })
+        })
+    }
+}
+
 export const selectUser = (user) => {
     return {
         type: 'USER_SELECTED',

@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Badge, Button, Modal, ModalHeader, ModalBody, ModalFooter, Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Alert, Badge, Button, Modal, ModalHeader, ModalBody, ModalFooter, Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Link } from 'react-router'
-import { loadUsersList, selectUser } from '../../actions/Users/index';
+import { loadUsersList, selectUser, removeUsers } from '../../actions/Users/index';
 import UsersDetails from './UsersDetails'
 
 class UsersList extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            user: undefined,
             modal: false,
+            removeModal: false,
             large: false,
             small: false,
             primary: false,
@@ -18,10 +20,14 @@ class UsersList extends Component {
             warning: false,
             danger: false,
             info: false,
-            dropdownOpen: false
+            dropdownOpen: false,
+            removeIds: [],
+            dangerAlertOpened: false,
+            successAlertOpened: false,
         };
 
         this.toggleModal = this.toggleModal.bind(this);
+        this.toggleRemoveModal = this.toggleRemoveModal.bind(this);
         this.toggleDropDown = this.toggleDropDown.bind(this);
         this.toggleLarge= this.toggleLarge.bind(this);
         this.toggleSmall= this.toggleSmall.bind(this);
@@ -30,7 +36,15 @@ class UsersList extends Component {
         this.toggleWarning= this.toggleWarning.bind(this);
         this.toggleDanger= this.toggleDanger.bind(this);
         this.toggleInfo= this.toggleInfo.bind(this);
-        
+        this.selectUserRadio = this.selectUserRadio.bind(this);
+        this.confirmRemove = this.confirmRemove.bind(this);
+        this.toggleAlert = this.toggleAlert.bind(this);
+    }
+
+    toggleAlert (type) {
+        var obj = {};
+        obj[type] = !this.state[type]
+        this.setState(obj);
     }
 
     componentDidMount() {
@@ -41,6 +55,11 @@ class UsersList extends Component {
         this.props.selectUser(user);
         this.setState({
             modal: !this.state.modal
+        });
+    }
+    toggleRemoveModal() {
+        this.setState({
+            removeModal: !this.state.removeModal
         });
     }
     toggleLarge() {
@@ -83,8 +102,31 @@ class UsersList extends Component {
             dropdownOpen: !this.state.dropdownOpen
         });
     }
+    selectUserRadio(user) {
+        this.props.selectUser(user)
+        this.setState({
+            user: user
+        });
+        let removeIds = this.state.removeIds;
+        removeIds.push(user.id);
+        this.setState({
+            removeIds: removeIds
+        })
+    }
+    confirmRemove () {
+        this.props.removeUsers(this.state.removeIds)
+        .then(() => {
+            this.toggleRemoveModal();
+            this.toggleAlert('successAlertOpened')
+        })
+        .catch((error) => {
+            this.toggleRemoveModal();
+            this.toggleAlert('dangerAlertOpened')
+        })
+    }
     render() {
         var createListItems = () => {
+            console.log(this.props.users)
             if(!this.props.users) return(
                 <tr key="0">
                     <td colSpan="6">
@@ -95,7 +137,7 @@ class UsersList extends Component {
             return this.props.users.map((user, i) => {
                 return (<tr key={user.id}>
                     <td>
-                        <input type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value={user.id} onClick={() => this.props.selectUser(user)} />
+                        <input type="radio" id="inline-checkbox1" name="inline-checkbox1" value={user.id} onClick={() => this.selectUserRadio(user)} />
                     </td>
                     <td scope="row">
                         {user.id}
@@ -124,15 +166,33 @@ class UsersList extends Component {
                         <Button color="primary" onClick={this.toggleModal}>Close</Button>
                         </ModalFooter>
                     </Modal>
+                    <Modal isOpen={this.state.removeModal} toggle={this.toggleRemoveModal} className={this.props.className} backdrop={false}>
+                        <ModalHeader toggle={this.toggleRemoveModal}>Remove User</ModalHeader>
+                        <ModalBody>
+                            Are you sure that want to delete the User #{this.state.removeIds}?
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button color="danger" onClick={this.confirmRemove}>Remove</Button>{' '}
+                            <Button color="secondary" onClick={this.toggleRemoveModal}>Cancel</Button>
+                        </ModalFooter>
+                    </Modal>
                 </div>
                 <div>
+                    <div>
+                        <Alert color="danger" isOpen={this.state.dangerAlertOpened}>
+                            <strong>Oh snap!</strong> Change a few things up and try submitting again.
+                        </Alert>
+                        <Alert color="success" isOpen={this.state.successAlertOpened}>
+                            <strong>Saved</strong> information successfully.
+                        </Alert>
+                    </div>
                     <table className="table">
                         <thead className="thead-inverse">
                             <tr>
                                 <th>
                                     <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggleDropDown}>
                                         <button onClick={this.toggleDropDown} className="btn btn-transparent active dropdown-toggle p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded={this.state.dropdownOpen}>
-                                        <i className="icon-settings"></i>
+                                            <i className="icon-settings"></i>
                                         </button>
                                         <DropdownMenu>
                                             <DropdownItem>
@@ -140,8 +200,16 @@ class UsersList extends Component {
                                                     <i className="icon-plus"></i> Create User
                                                 </Link>
                                             </DropdownItem>
-                                            <DropdownItem>Edit Selected</DropdownItem>
-                                            <DropdownItem>Remove Selected</DropdownItem>
+                                            <DropdownItem>
+                                                <Link to={'/pages/users/edit'} className="nav-link">
+                                                    <i className="icon-equalizer"></i> Edit User
+                                                </Link>
+                                            </DropdownItem>
+                                            <DropdownItem disabled={ this.state.user ? undefined : true }>
+                                                <Link id="remove" onClick={this.toggleRemoveModal} className="nav-link">
+                                                    <i className="icon-equalizer"></i> Remove Selected 
+                                                </Link>
+                                            </DropdownItem>
                                         </DropdownMenu>
                                     </Dropdown>
                                 </th>
@@ -170,7 +238,7 @@ const mapStateToProps = (state) => {
 }
 
 const matchDispatchToProps = (dispatch) => {
-    return bindActionCreators({ loadUsersList: loadUsersList, selectUser: selectUser }, dispatch)
+    return bindActionCreators({ loadUsersList: loadUsersList, selectUser: selectUser, removeUsers: removeUsers }, dispatch)
 }
 
 export default connect(mapStateToProps, matchDispatchToProps)(UsersList);

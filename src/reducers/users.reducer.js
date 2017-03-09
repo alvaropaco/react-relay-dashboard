@@ -13,6 +13,7 @@ let classes = [
   'success'
 ]
 export default (state=null, action) => {
+  console.log(state)
   switch(action.type) {
       case "FETCH_USERS_FULFILLED":
         var list = action.payload
@@ -21,8 +22,21 @@ export default (state=null, action) => {
           list[i].permission = permissions[o.permission];
         }) 
         return list
+      case "REMOVE_USERS_FULFILLED":
+        var list = action.payload
+        _.map(list, (o, i) => {
+          list[i].permissionClass = classes[o.permission];
+          list[i].permission = permissions[o.permission];
+        }) 
+        return list
       case "CREATE_USER_FULFILLED":
-        return action.payload
+        var list = action.payload
+        list.push(action.payload);
+        _.map(list, (o, i) => {
+          list[i].permissionClass = classes[o.permission];
+          list[i].permission = permissions[o.permission];
+        }) 
+        return list
       default:
         return state;
   }
