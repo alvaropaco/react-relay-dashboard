@@ -13,7 +13,6 @@ let classes = [
   'success'
 ]
 export default (state=null, action) => {
-  console.log(state)
   switch(action.type) {
       case "FETCH_USERS_FULFILLED":
         var list = action.payload
