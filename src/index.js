@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, hashHistory } from 'react-router';
+import Relay from 'react-relay';
+import useRelay from 'react-router-relay';
+import { Router, hashHistory, applyRouterMiddleware } from 'react-router';
 import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
 import {IntlProvider} from 'react-intl';
@@ -11,13 +13,28 @@ import routes from './routes';
 import reducers from './reducers';
 
 const middleware = applyMiddleware(thunk,promise(),logger())
-const store = createStore(reducers, middleware);
+// const store = createStore(reducers, middleware);
+
+Relay.injectNetworkLayer(
+  new Relay.DefaultNetworkLayer('http://localhost:5000')
+);
 
 ReactDOM.render(
-  <Provider store={store}>
+  /*<Provider store={store}>
     <IntlProvider locale="en">
-      <Router routes={routes} history={hashHistory} />
+      <Router 
+        forceFetch
+        routes={routes} 
+        history={hashHistory}
+        render={applyRouterMiddleware(useRelay)}
+        environment={Relay.Store}/>
     </IntlProvider>
-  </Provider>
+  </Provider>*/
+  <Router 
+        forceFetch
+        routes={routes} 
+        history={hashHistory}
+        render={applyRouterMiddleware(useRelay)}
+        environment={Relay.Store}/>
   , document.getElementById('root')
 );

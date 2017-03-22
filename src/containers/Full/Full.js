@@ -3,6 +3,8 @@ import Header from '../../components/Header/';
 import Sidebar from '../../components/Sidebar/';
 import Aside from '../../components/Aside/';
 import Footer from '../../components/Footer/';
+import Relay from 'react-relay';
+import { withRouter } from 'react-router'
 
 import Breadcrumbs from 'react-breadcrumbs';
 
@@ -34,4 +36,15 @@ class Full extends Component {
   }
 }
 
-export default Full;
+export default Relay.createContainer(
+  withRouter(Full),
+  {
+    fragments: {
+      viewer: () => Relay.QL`
+        fragment on Viewer {
+          id
+        }
+      `,
+    },
+  },
+)

@@ -1,5 +1,7 @@
 import React from 'react';
-import { Router, Route, IndexRoute, hashHistory } from 'react-router';
+import { Router, Route, IndexRoute, hashHistory, applyRouterMiddleware } from 'react-router';
+import Relay from 'react-relay';
+import useRelay from 'react-router-relay';
 
 // Containers
 import Full from './containers/Full/'
@@ -27,12 +29,18 @@ import UpdateUser from './views/Pages/Users/EditUser'
 import Widgets from './views/Widgets/'
 
 export default (
-  <Router history={hashHistory}>
-    <Route path="/" name="Home" component={Full}>
+  <Router 
+    history={hashHistory}>
+    <Route 
+      path="/" 
+      name="Home" 
+      component={Full}>
       <IndexRoute component={Dashboard}/>
       <Route path="dashboard" name="Dashboard" component={Dashboard}/>
       <Route path="pages/" name="Features">
-        <Route path="users/" name="Users Page">
+        <Route 
+          path="users/" 
+          name="Users Page">
           <IndexRoute component={Users}/>
           <Route path="new" name="New User" component={CreateUser}/>
           <Route path="edit" name="Edit User" component={UpdateUser}/>  

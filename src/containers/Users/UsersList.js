@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import Relay from 'react-relay';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Alert, Badge, Button, Modal, ModalHeader, ModalBody, ModalFooter, Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
-import { Link } from 'react-router'
+import { Link, withRouter } from 'react-router'
 import { loadUsersList, selectUser, removeUsers } from '../../actions/Users/index';
 import UsersDetails from './UsersDetails'
+
+
 
 class UsersList extends Component {
     constructor(props) {
@@ -39,8 +42,9 @@ class UsersList extends Component {
         this.selectUserRadio = this.selectUserRadio.bind(this);
         this.confirmRemove = this.confirmRemove.bind(this);
         this.toggleAlert = this.toggleAlert.bind(this);
+        console.log(this.props.router)
     }
-
+    
     toggleAlert (type) {
         var obj = {};
         obj[type] = !this.state[type]
@@ -126,7 +130,6 @@ class UsersList extends Component {
     }
     render() {
         var createListItems = () => {
-            console.log(this.props.users)
             if(!this.props.users) return(
                 <tr key="0">
                     <td colSpan="6">
@@ -230,6 +233,28 @@ class UsersList extends Component {
         )
     }
 }
+
+// module.exports = Relay.createContainer(
+//     withRouter(UsersList),
+//     {
+//         fragments: {
+//             viewer: () => Relay.QL`
+//                 fragment on Viewer {
+//                     users {
+//                         edges {
+//                             node {
+//                                 id
+//                                 name
+//                                 firstName
+//                                 lastName
+//                             }
+//                         }
+//                     }
+//                 }
+//             `
+//         }
+//     }
+// );
 
 const mapStateToProps = (state) => {
     return {

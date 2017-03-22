@@ -3,6 +3,11 @@
   "version": "1.0.0-alpha.4",
   "private": true,
   "homepage": ".",
+  "graphql": {
+    "request": {
+      "url": "https://api.graph.cool/relay/v1/cj09wu2ffi5zo0156qfn1q36h"
+    }
+  },
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
@@ -22,7 +27,9 @@
     "react-dom": "^15.4.2",
     "react-intl": "^2.2.3",
     "react-redux": "^5.0.3",
+    "react-relay": "^0.10.0",
     "react-router": "^3.0.2",
+    "react-router-relay": "^0.13.5",
     "reactstrap": "4.2.0",
     "redux": "^3.6.0",
     "redux-promise-middleware": "^4.2.0",
